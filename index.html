@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adjarindo Creative Aksara - Menerbitkan Cinta Untuk Semesta</title>
+    <title>Adjarindo Creative Aksara - Menerbitkan dengan Cinta</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@
         .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(245,197,24,0.3); }
         .btn-red { background:linear-gradient(135deg, #DC2626, #B91C1C); color:#fff; font-weight:700; padding:14px 32px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:15px; }
         .btn-red:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(220,38,38,0.3); }
-        .btn-outline { border:2px solid rgba(245,197,24,0.5); color:#F5C518; font-weight:600; padding:12px 28px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:14px; background:transparent; }
+        .btn-outline { border:2px solid rgba(245,197,24,0.5); color:#F5C518; font-weight:600; padding:12px 28px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:14px; background:transparent; cursor:pointer; }
         .btn-outline:hover { background:rgba(245,197,24,0.1); border-color:#F5C518; }
 
         .section-title { font-size:clamp(28px,5vw,48px); font-weight:800; line-height:1.1; letter-spacing:-0.03em; }
@@ -86,12 +86,36 @@
             transform: scale(1) translateY(0);
         }
 
-        #bookDetailModal {
-            z-index: 100 !important;
+        /* ============ BARU: Full page view untuk detail buku ============ */
+        .page-view {
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+            background: #111;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        #catalogModal {
-            z-index: 50 !important;
+        .page-view.active {
+            opacity: 1;
+            visibility: visible;
         }
+        .page-view .page-content {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.4s ease 0.1s, opacity 0.4s ease 0.1s;
+        }
+        .page-view.active .page-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Skeleton loading */
+        .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: skeleton 1.5s infinite; }
+        @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        #bookDetailModal, #catalogModal { display: none !important; } /* Sudah tidak dipakai, tapi disimpan */
 
         .nav-scrolled { background:rgba(17,17,17,0.9)!important; backdrop-filter:blur(20px)!important; border-bottom:1px solid rgba(255,255,255,0.05); }
 
@@ -104,27 +128,36 @@
 
         .promo-glow { box-shadow:0 0 60px rgba(245,197,24,0.1), 0 0 120px rgba(220,38,38,0.05); }
         
-        /* Logo styling */
-        .logo-text {
-            font-family: 'Manrope', sans-serif;
-            font-weight: 800;
-            letter-spacing: -0.02em;
+        .logo-text { font-family: 'Manrope', sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+        .logo-text .adjarindo { color: #F5C518; }
+        .logo-text .creative { color: #ffffff; }
+        .logo-text .aksara { color: #F5C518; }
+        .logo-sub { font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.4); font-weight: 400; }
+
+        /* ============ BARU: Form input styling ============ */
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
         }
-        .logo-text .adjarindo {
-            color: #F5C518;
+        .form-input:focus {
+            outline: none;
+            border-color: #F5C518;
+            background: rgba(245,197,24,0.05);
+            box-shadow: 0 0 0 3px rgba(245,197,24,0.1);
         }
-        .logo-text .creative {
-            color: #ffffff;
-        }
-        .logo-text .aksara {
-            color: #F5C518;
-        }
-        .logo-sub {
-            font-size: 10px;
-            letter-spacing: 0.15em;
-            color: rgba(255,255,255,0.4);
-            font-weight: 400;
-        }
+        .form-input::placeholder { color: rgba(255,255,255,0.3); }
+        .form-label { display: block; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
+        .form-label .required { color: #DC2626; }
+
+        /* Step indicator */
+        .step-badge { width: 28px; height: 28px; border-radius: 50%; background: rgba(245,197,24,0.15); border: 1px solid rgba(245,197,24,0.3); color: #F5C518; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -133,27 +166,24 @@
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background:transparent;">
     <div class="max-w-7xl mx-auto px-5 md:px-8">
         <div class="flex items-center justify-between h-20">
-            <!-- Logo - dari repository -->
             <a href="#beranda" class="flex items-center gap-3 shrink-0">
                 <div class="flex items-center gap-3">
-                    <img src="https://raw.githubusercontent.com/ajarindsite/penerbit/refs/heads/main/ajarindjp.png" alt="Adjarindo Creative Aksara" class="h-14 w-auto rounded-lg" onerror="this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara" class="h-14 w-auto rounded-lg" onerror="this.style.display='none'">
                     <div class="flex flex-col">
                         <span class="logo-text text-lg">
                             <span class="adjarindo">Adjarindo</span>
                             <span class="creative">Creative</span>
                             <span class="aksara">Aksara</span>
                         </span>
-                        <span class="logo-sub">Menerbitkan Cinta Untuk Semesta</span>
+                        <span class="logo-sub">Menerbitkan dengan Cinta</span>
                     </div>
                 </div>
             </a>
 
-            <!-- Desktop Menu -->
             <div class="hidden lg:flex items-center gap-1">
                 <a href="#beranda" class="px-4 py-2 text-sm font-medium text-white/80 hover:text-[#F5C518] transition-colors rounded-lg hover:bg-white/5">Beranda</a>
                 <a href="#tentang" class="px-4 py-2 text-sm font-medium text-white/80 hover:text-[#F5C518] transition-colors rounded-lg hover:bg-white/5">Tentang Kami</a>
 
-                <!-- Program Dropdown -->
                 <div class="dropdown relative">
                     <button class="px-4 py-2 text-sm font-medium text-white/80 hover:text-[#F5C518] transition-colors rounded-lg hover:bg-white/5 flex items-center gap-1">
                         Program <i class="fas fa-chevron-down text-[10px] ml-1"></i>
@@ -195,14 +225,12 @@
                 </a>
             </div>
 
-            <!-- Mobile Menu Button -->
             <button id="mobileMenuBtn" class="lg:hidden text-white text-2xl p-2 hover:bg-white/10 rounded-xl transition-colors">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
     </div>
 
-    <!-- Mobile Menu -->
     <div id="mobileMenu" class="lg:hidden hidden glass-dark">
         <div class="max-w-7xl mx-auto px-5 py-4 space-y-2">
             <a href="#beranda" class="block px-4 py-3 text-sm font-medium text-white/80 hover:text-[#F5C518] hover:bg-white/5 rounded-xl transition-colors mobile-link">Beranda</a>
@@ -254,7 +282,6 @@
                 </a>
             </div>
 
-            <!-- Stats -->
             <div class="grid grid-cols-3 gap-6 mt-16 animate-fade-up delay-3">
                 <div>
                     <div class="text-3xl md:text-4xl font-extrabold text-[#F5C518]">100+</div>
@@ -272,7 +299,6 @@
         </div>
     </div>
 
-    <!-- Scroll indicator -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 float-anim">
         <div class="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1.5">
             <div class="w-1.5 h-3 bg-[#F5C518] rounded-full animate-bounce"></div>
@@ -284,7 +310,6 @@
 <section class="relative py-20 md:py-28 bg-black">
     <div class="max-w-7xl mx-auto px-5 md:px-8">
         <div class="glass-card rounded-3xl p-8 md:p-14 promo-glow relative overflow-hidden">
-            <!-- Decorative -->
             <div class="absolute -top-20 -right-20 w-60 h-60 bg-[#F5C518]/10 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-[#DC2626]/10 rounded-full blur-3xl"></div>
 
@@ -341,7 +366,6 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Penerbitan -->
             <div class="glass-card rounded-2xl p-8 group">
                 <div class="w-14 h-14 rounded-2xl bg-[#F5C518]/10 border border-[#F5C518]/20 flex items-center justify-center text-[#F5C518] text-2xl mb-6 group-hover:bg-[#F5C518] group-hover:text-black transition-all duration-300">
                     <i class="fas fa-book-open"></i>
@@ -353,7 +377,6 @@
                 </a>
             </div>
 
-            <!-- Pendampingan Menulis Kreatif -->
             <div class="glass-card rounded-2xl p-8 group">
                 <div class="w-14 h-14 rounded-2xl bg-[#F5C518]/10 border border-[#F5C518]/20 flex items-center justify-center text-[#F5C518] text-2xl mb-6 group-hover:bg-[#F5C518] group-hover:text-black transition-all duration-300">
                     <i class="fas fa-pen-fancy"></i>
@@ -365,7 +388,6 @@
                 </a>
             </div>
 
-            <!-- Ghost Writer -->
             <div class="glass-card rounded-2xl p-8 group">
                 <div class="w-14 h-14 rounded-2xl bg-[#F5C518]/10 border border-[#F5C518]/20 flex items-center justify-center text-[#F5C518] text-2xl mb-6 group-hover:bg-[#F5C518] group-hover:text-black transition-all duration-300">
                     <i class="fas fa-user-secret"></i>
@@ -377,7 +399,6 @@
                 </a>
             </div>
 
-            <!-- Pendampingan AI -->
             <div class="glass-card rounded-2xl p-8 group">
                 <div class="w-14 h-14 rounded-2xl bg-[#DC2626]/10 border border-[#DC2626]/20 flex items-center justify-center text-[#DC2626] text-2xl mb-6 group-hover:bg-[#DC2626] group-hover:text-white transition-all duration-300">
                     <i class="fas fa-robot"></i>
@@ -389,7 +410,6 @@
                 </a>
             </div>
 
-            <!-- Kerjasama Komunitas & Sekolah -->
             <div class="glass-card rounded-2xl p-8 group">
                 <div class="w-14 h-14 rounded-2xl bg-[#F5C518]/10 border border-[#F5C518]/20 flex items-center justify-center text-[#F5C518] text-2xl mb-6 group-hover:bg-[#F5C518] group-hover:text-black transition-all duration-300">
                     <i class="fas fa-handshake"></i>
@@ -401,7 +421,6 @@
                 </a>
             </div>
 
-            <!-- Terbit Antologi + Hypnowriting -->
             <div class="glass-card rounded-2xl p-8 group relative overflow-hidden">
                 <div class="absolute top-3 right-3 bg-[#DC2626] text-white text-[10px] font-bold px-2 py-1 rounded-lg">BONUS</div>
                 <div class="w-14 h-14 rounded-2xl bg-[#DC2626]/10 border border-[#DC2626]/20 flex items-center justify-center text-[#DC2626] text-2xl mb-6 group-hover:bg-[#DC2626] group-hover:text-white transition-all duration-300">
@@ -444,7 +463,7 @@
         <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
             <div>
                 <span class="tag-badge"><i class="fas fa-heart mr-1"></i> TENTANG KAMI</span>
-                <h2 class="section-title mt-4">Adjarindo Creative Aksara<br><span class="text-[#F5C518]">Menerbitkan Cinta Untuk Semesta</span></h2>
+                <h2 class="section-title mt-4">Adjarindo Creative Aksara<br><span class="text-[#F5C518]">Menerbitkan dengan Cinta</span></h2>
                 <p class="text-white/60 mt-6 leading-relaxed">
                     Adjarindo Creative Aksara adalah penerbit yang berkomitmen untuk membantu setiap orang mewujudkan karya tulisnya menjadi buku nyata. Kami percaya bahwa setiap orang punya cerita yang layak untuk dibagikan.
                 </p>
@@ -476,7 +495,7 @@
             </div>
             <div class="flex justify-center">
                 <div class="glass rounded-3xl p-10 inline-block">
-                    <img src="https://raw.githubusercontent.com/ajarindsite/penerbit/refs/heads/main/ajarindjp.png" alt="Adjarindo Creative Aksara Logo" class="w-64 md:w-80 rounded-2xl" onerror="this.src='https://via.placeholder.com/300x300/F5C518/111111?text=Adjarindo+Creative+Aksara'">
+                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara Logo" class="w-64 md:w-80 rounded-2xl" onerror="this.src='https://via.placeholder.com/300x300/F5C518/111111?text=Adjarindo+Creative+Aksara'">
                 </div>
             </div>
         </div>
@@ -492,7 +511,6 @@
         </div>
 
         <div class="space-y-4" id="faqContainer">
-            <!-- FAQ 1 -->
             <div class="faq-item glass-card rounded-2xl overflow-hidden">
                 <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
                     <span class="font-semibold text-base pr-4">Apa manfaat ISBN dan QRCBN?</span>
@@ -511,7 +529,6 @@
                 </div>
             </div>
 
-            <!-- FAQ 2 -->
             <div class="faq-item glass-card rounded-2xl overflow-hidden">
                 <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
                     <span class="font-semibold text-base pr-4">Apakah ISBN menentukan legalitas buku?</span>
@@ -531,7 +548,6 @@
                 </div>
             </div>
 
-            <!-- FAQ 3 -->
             <div class="faq-item glass-card rounded-2xl overflow-hidden">
                 <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
                     <span class="font-semibold text-base pr-4">Apa beda Penerbit dan Percetakan?</span>
@@ -568,7 +584,6 @@
                 </div>
             </div>
 
-            <!-- FAQ 4 -->
             <div class="faq-item glass-card rounded-2xl overflow-hidden">
                 <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
                     <span class="font-semibold text-base pr-4">Berapa lama proses penerbitan buku?</span>
@@ -582,7 +597,6 @@
                 </div>
             </div>
 
-            <!-- FAQ 5 -->
             <div class="faq-item glass-card rounded-2xl overflow-hidden">
                 <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
                     <span class="font-semibold text-base pr-4">Apakah bisa menerbitkan buku tanpa ISBN?</span>
@@ -608,17 +622,15 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <!-- Alamat -->
             <div class="glass-card rounded-2xl p-8 text-center group">
                 <div class="flex justify-center mb-5">
-                    <img src="https://raw.githubusercontent.com/ajarindsite/penerbit/refs/heads/main/ajarindjp.png" alt="Adjarindo Creative Aksara" class="w-16 h-16 rounded-xl object-cover" onerror="this.src='https://via.placeholder.com/64x64/F5C518/111111?text=ACA'">
+                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara" class="w-16 h-16 rounded-xl object-cover" onerror="this.src='https://via.placeholder.com/64x64/F5C518/111111?text=ACA'">
                 </div>
                 <i class="fas fa-map-marker-alt text-[#DC2626] text-2xl mb-4"></i>
                 <h4 class="font-bold mb-3">Alamat</h4>
                 <p class="text-white/50 text-sm leading-relaxed">Alamanda Regecy, Blok K10/20<br>Karangsatria, Tambun Utara<br>Kab. Bekasi</p>
             </div>
 
-            <!-- WhatsApp -->
             <div class="glass-card rounded-2xl p-8 text-center group">
                 <i class="fab fa-whatsapp text-green-500 text-3xl mb-4"></i>
                 <h4 class="font-bold mb-3">WhatsApp</h4>
@@ -628,18 +640,16 @@
                 </a>
             </div>
 
-            <!-- Email -->
             <div class="glass-card rounded-2xl p-8 text-center group">
                 <i class="fas fa-envelope text-[#F5C518] text-2xl mb-4"></i>
                 <h4 class="font-bold mb-3">Email</h4>
-                <p class="text-white/50 text-sm mb-4">ajarind890@gmail.com</p>
-                <a href="mailto:ajarind890@gmail.com" class="btn-outline !py-2.5 !px-5 !text-sm w-full justify-center">
+                <p class="text-white/50 text-sm mb-4">jpcreative.bekasi@gmail.com</p>
+                <a href="mailto:jpcreative.bekasi@gmail.com" class="btn-outline !py-2.5 !px-5 !text-sm w-full justify-center">
                     <i class="fas fa-paper-plane"></i> Kirim Email
                 </a>
             </div>
         </div>
 
-        <!-- CTA -->
         <div class="text-center mt-12">
             <div class="glass rounded-2xl p-8 md:p-12 max-w-2xl mx-auto">
                 <h3 class="text-2xl font-bold mb-3">Siap Menerbitkan Buku Anda?</h3>
@@ -658,17 +668,17 @@
         <div class="grid md:grid-cols-4 gap-8">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3 mb-4">
-                    <img src="https://raw.githubusercontent.com/ajarindsite/penerbit/refs/heads/main/ajarindjp.png" alt="Adjarindo Creative Aksara" class="h-12 w-auto rounded-lg" onerror="this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara" class="h-12 w-auto rounded-lg" onerror="this.style.display='none'">
                     <div class="flex flex-col">
                         <span class="logo-text text-lg">
                             <span class="adjarindo">Adjarindo</span>
                             <span class="creative">Creative</span>
                             <span class="aksara">Aksara</span>
                         </span>
-                        <span class="logo-sub">Menerbitkan Cinta Untuk Semesta</span>
+                        <span class="logo-sub">Menerbitkan dengan Cinta</span>
                     </div>
                 </div>
-                <p class="text-white/40 text-sm max-w-md leading-relaxed">Adjarindo Creative Aksara — Menerbitkan Cinta Untuk Semesta. Penerbit yang mendampingi Anda mewujudkan karya tulis menjadi buku nyata dengan kualitas profesional dan harga terjangkau.</p>
+                <p class="text-white/40 text-sm max-w-md leading-relaxed">Adjarindo Creative Aksara — Menerbitkan dengan Cinta. Penerbit yang mendampingi Anda mewujudkan karya tulis menjadi buku nyata dengan kualitas profesional dan harga terjangkau.</p>
             </div>
             <div>
                 <h5 class="font-bold text-[#F5C518] mb-4">Menu</h5>
@@ -686,7 +696,7 @@
                 <div class="space-y-2 text-white/40 text-sm">
                     <p><i class="fas fa-map-marker-alt text-[#DC2626] mr-2"></i>Alamanda Regecy, Bekasi</p>
                     <p><i class="fab fa-whatsapp text-green-500 mr-2"></i>0821-1203-8795</p>
-                    <p><i class="fas fa-envelope text-[#F5C518] mr-2"></i>ajarind890@gmail.com</p>
+                    <p><i class="fas fa-envelope text-[#F5C518] mr-2"></i>jpcreative.bekasi@gmail.com</p>
                 </div>
             </div>
         </div>
@@ -694,7 +704,7 @@
             <p class="text-white/30 text-xs">&copy; 2025 Adjarindo Creative Aksara. All rights reserved.</p>
             <div class="flex items-center gap-4">
                 <a href="https://wa.me/6282112038795" target="_blank" class="text-white/30 hover:text-green-500 transition-colors"><i class="fab fa-whatsapp text-lg"></i></a>
-                <a href="mailto:ajarind890@gmail.com" class="text-white/30 hover:text-[#F5C518] transition-colors"><i class="fas fa-envelope text-lg"></i></a>
+                <a href="mailto:jpcreative.bekasi@gmail.com" class="text-white/30 hover:text-[#F5C518] transition-colors"><i class="fas fa-envelope text-lg"></i></a>
                 <a href="#" class="text-white/30 hover:text-[#F5C518] transition-colors"><i class="fab fa-instagram text-lg"></i></a>
             </div>
         </div>
@@ -726,161 +736,250 @@
     </div>
 </div>
 
-<!-- ==================== BOOK DETAIL MODAL ==================== -->
-<div id="bookDetailModal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.85);">
-    <div class="modal-content glass-dark rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
-        <button onclick="closeBookDetail()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="p-6 md:p-8">
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="flex justify-center">
-                    <img id="modalBookImg" src="" alt="" class="w-48 md:w-56 rounded-2xl shadow-2xl">
-                </div>
+<!-- ==================== BARU: HALAMAN DETAIL BUKU (FULL PAGE) ==================== -->
+<div id="bookPage" class="page-view">
+    <div class="page-content">
+        <!-- Top bar dengan tombol back -->
+        <div class="sticky top-0 z-10 glass-dark border-b border-white/5">
+            <div class="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between gap-4">
+                <button onclick="closeBookPage()" class="flex items-center gap-2 text-white/70 hover:text-[#F5C518] transition-colors text-sm font-medium">
+                    <i class="fas fa-arrow-left"></i> <span class="hidden sm:inline">Kembali ke Katalog</span><span class="sm:hidden">Kembali</span>
+                </button>
+                <button onclick="shareBook()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-[#F5C518] transition-all text-sm">
+                    <i class="fas fa-share-alt"></i> <span class="hidden sm:inline">Bagikan</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-5 md:px-8 py-8 md:py-12">
+            <!-- Breadcrumb -->
+            <div class="text-xs text-white/40 mb-6">
+                <a href="#beranda" onclick="closeBookPage()" class="hover:text-[#F5C518] transition-colors">Beranda</a>
+                <i class="fas fa-chevron-right mx-2 text-[8px]"></i>
+                <a href="#galeri" onclick="closeBookPage()" class="hover:text-[#F5C518] transition-colors">Katalog</a>
+                <i class="fas fa-chevron-right mx-2 text-[8px]"></i>
+                <span id="breadcrumbTitle" class="text-white/60"></span>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                <!-- Kolom kiri: Gambar -->
                 <div>
-                    <h3 id="modalBookTitle" class="text-2xl font-extrabold text-[#F5C518]"></h3>
-                    <p id="modalBookAuthor" class="text-white/60 mt-1 text-sm"></p>
-                    <div class="mt-4 space-y-2">
-                        <div class="flex items-center gap-2 text-sm">
-                            <i class="fas fa-file-alt text-[#F5C518] w-5"></i>
-                            <span class="text-white/50">Halaman:</span> 
-                            <span id="modalBookPages" class="text-white/80 font-medium"></span>
+                    <div class="glass rounded-3xl p-6 md:p-10 flex items-center justify-center sticky top-24">
+                        <img id="pageBookImg" src="" alt="" class="w-full max-w-xs md:max-w-sm rounded-2xl shadow-2xl">
+                    </div>
+
+                    <!-- Info tambahan: buku terkait -->
+                    <div class="mt-8">
+                        <h4 class="font-bold text-sm text-white/60 mb-3"><i class="fas fa-bookmark text-[#F5C518] mr-2"></i>Buku Lainnya</h4>
+                        <div id="relatedBooks" class="grid grid-cols-3 gap-3"></div>
+                    </div>
+                </div>
+
+                <!-- Kolom kanan: Detail & Form -->
+                <div>
+                    <span class="tag-badge"><i class="fas fa-book mr-1"></i> BUKU TERSEDIA</span>
+                    <h1 id="pageBookTitle" class="text-3xl md:text-4xl font-extrabold mt-4 leading-tight"></h1>
+                    <p id="pageBookAuthor" class="text-white/60 mt-2 text-base"></p>
+
+                    <!-- Rating bintang (statis, biar keliatan seperti e-commerce) -->
+                    <div class="flex items-center gap-2 mt-4">
+                        <div class="flex text-[#F5C518] text-sm">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                         </div>
-                        <div class="flex items-center gap-2 text-sm">
-                            <i class="fas fa-barcode text-[#F5C518] w-5"></i>
-                            <span class="text-white/50">ISBN/QRCBN:</span> 
-                            <span id="modalBookISBN" class="text-white/80 font-medium"></span>
+                        <span class="text-white/50 text-sm">4.8 · 12 terjual</span>
+                    </div>
+
+                    <!-- Harga -->
+                    <div class="mt-6 p-5 glass rounded-2xl">
+                        <div class="text-xs text-white/50 mb-1">Harga</div>
+                        <div id="pageBookPrice" class="text-3xl md:text-4xl font-extrabold text-[#F5C518]"></div>
+                        <div class="text-xs text-white/40 mt-2"><i class="fas fa-info-circle mr-1"></i>Belum termasuk ongkos kirim</div>
+                    </div>
+
+                    <!-- Spesifikasi -->
+                    <div class="mt-6 space-y-3">
+                        <div class="flex items-start gap-3 text-sm">
+                            <i class="fas fa-file-alt text-[#F5C518] w-5 mt-0.5"></i>
+                            <div><div class="text-white/40 text-xs">Jumlah Halaman</div><div id="pageBookPages" class="text-white/90 font-medium"></div></div>
                         </div>
-                        <div class="flex items-center gap-2 text-sm">
-                            <i class="fas fa-tag text-[#DC2626] w-5"></i>
-                            <span class="text-white/50">Harga:</span> 
-                            <span id="modalBookPrice" class="text-[#F5C518] font-bold text-lg"></span>
+                        <div class="flex items-start gap-3 text-sm">
+                            <i class="fas fa-barcode text-[#F5C518] w-5 mt-0.5"></i>
+                            <div><div class="text-white/40 text-xs">ISBN / QRCBN</div><div id="pageBookISBN" class="text-white/90 font-medium"></div></div>
+                        </div>
+                        <div class="flex items-start gap-3 text-sm">
+                            <i class="fas fa-user-edit text-[#F5C518] w-5 mt-0.5"></i>
+                            <div><div class="text-white/40 text-xs">Penulis</div><div id="pageBookAuthor2" class="text-white/90 font-medium"></div></div>
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <h5 class="font-semibold text-sm mb-2">Sinopsis</h5>
-                        <p id="modalBookSynopsis" class="text-white/50 text-sm leading-relaxed"></p>
+
+                    <!-- Sinopsis -->
+                    <div class="mt-8">
+                        <h3 class="font-bold text-lg mb-3"><i class="fas fa-align-left text-[#F5C518] mr-2"></i>Sinopsis</h3>
+                        <p id="pageBookSynopsis" class="text-white/60 text-sm leading-relaxed"></p>
                     </div>
-                    <a id="modalBookWA" href="#" target="_blank" class="btn-red mt-6 w-full justify-center !text-sm">
-                        <i class="fab fa-whatsapp"></i> Pesan Buku Ini
-                    </a>
+
+                    <!-- CTA -->
+                    <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                        <button onclick="scrollToOrderForm()" class="btn-primary flex-1 justify-center">
+                            <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+                        </button>
+                        <a id="pageBookWA" href="#" target="_blank" class="btn-outline flex-1 justify-center">
+                            <i class="fab fa-whatsapp"></i> Tanya via WA
+                        </a>
+                    </div>
+
+                    <!-- ============ FORM PEMESANAN ============ -->
+                    <div id="orderFormSection" class="mt-10 p-6 md:p-8 glass rounded-3xl">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="step-badge">1</div>
+                            <h3 class="font-bold text-lg">Data Pemesan</h3>
+                        </div>
+
+                        <form id="orderForm" class="space-y-4">
+                            <div>
+                                <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+                                <input type="text" name="nama" class="form-input" placeholder="Contoh: Ahmad Rizki" required>
+                            </div>
+
+                            <div>
+                                <label class="form-label">No. WhatsApp <span class="required">*</span></label>
+                                <input type="tel" name="wa" class="form-input" placeholder="Contoh: 081234567890" required pattern="[0-9+\-\s]{9,15}">
+                            </div>
+
+                            <div>
+                                <label class="form-label">Alamat Pengiriman <span class="required">*</span></label>
+                                <textarea name="alamat" class="form-input" rows="3" placeholder="Nama jalan, RT/RW, kelurahan, kecamatan, kota, kode pos" required></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="form-label">Jumlah <span class="required">*</span></label>
+                                    <input type="number" name="jumlah" class="form-input" value="1" min="1" max="99" required>
+                                </div>
+                                <div>
+                                    <label class="form-label">Ongkir</label>
+                                    <input type="text" class="form-input" value="Dihitung admin" disabled style="opacity:0.6;">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="form-label">Catatan (opsional)</label>
+                                <textarea name="catatan" class="form-input" rows="2" placeholder="Contoh: minta tanda tangan penulis"></textarea>
+                            </div>
+
+                            <!-- Ringkasan total -->
+                            <div class="mt-4 p-4 bg-[#F5C518]/5 border border-[#F5C518]/20 rounded-2xl">
+                                <div class="flex justify-between items-center text-sm text-white/60 mb-2">
+                                    <span>Harga satuan</span>
+                                    <span id="summaryUnitPrice" class="text-white/90 font-medium">-</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm text-white/60 mb-2">
+                                    <span>Jumlah</span>
+                                    <span id="summaryQty" class="text-white/90 font-medium">1</span>
+                                </div>
+                                <div class="border-t border-white/10 mt-3 pt-3 flex justify-between items-center">
+                                    <span class="font-semibold">Total (belum ongkir)</span>
+                                    <span id="summaryTotal" class="text-[#F5C518] font-extrabold text-xl">-</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-red w-full justify-center mt-2">
+                                <i class="fab fa-whatsapp"></i> Kirim Pesanan via WhatsApp
+                            </button>
+                            <p class="text-xs text-white/40 text-center">
+                                <i class="fas fa-lock mr-1"></i>Data Anda hanya dipakai untuk proses pemesanan
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-black py-8 border-t border-white/5 mt-12">
+            <div class="max-w-7xl mx-auto px-5 md:px-8 text-center text-white/30 text-xs">
+                &copy; 2025 Adjarindo Creative Aksara · <button onclick="closeBookPage()" class="hover:text-[#F5C518] transition-colors">Kembali ke Beranda</button>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<!-- ==================== BARU: HALAMAN CEK PESANAN ==================== -->
+<div id="ordersPage" class="page-view">
+    <div class="page-content">
+        <div class="sticky top-0 z-10 glass-dark border-b border-white/5">
+            <div class="max-w-3xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between">
+                <button onclick="closeOrdersPage()" class="flex items-center gap-2 text-white/70 hover:text-[#F5C518] transition-colors text-sm font-medium">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+                <h2 class="font-bold text-sm">Riwayat Pesanan</h2>
+            </div>
+        </div>
+
+        <div class="max-w-3xl mx-auto px-5 md:px-8 py-12">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-[#F5C518]/10 border border-[#F5C518]/20 flex items-center justify-center text-[#F5C518] text-2xl mx-auto mb-4">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold">Riwayat Pesanan</h1>
+                <p class="text-white/50 text-sm mt-2">Masukkan nomor WhatsApp untuk melihat pesanan Anda</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 mb-6">
+                <div class="flex gap-3">
+                    <input type="tel" id="searchWA" class="form-input flex-1" placeholder="08xxxxxxxxxx">
+                    <button onclick="searchOrders()" class="btn-primary !py-3 !px-6 !text-sm">
+                        <i class="fas fa-search"></i> Cari
+                    </button>
+                </div>
+            </div>
+
+            <div id="ordersList" class="space-y-4">
+                <div class="text-center py-12 text-white/40">
+                    <i class="fas fa-inbox text-4xl mb-3"></i>
+                    <p class="text-sm">Belum ada pencarian</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ==================== FULL CATALOG MODAL ==================== -->
-<div id="catalogModal" class="modal-overlay fixed inset-0 z-[50]" style="background:rgba(0,0,0,0.9);">
-    <div class="modal-content h-full overflow-y-auto">
-        <div class="max-w-7xl mx-auto px-5 md:px-8 py-8">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h2 class="text-3xl font-extrabold"><span class="text-[#F5C518]">Katalog</span> Lengkap</h2>
-                    <p class="text-white/50 text-sm mt-1">Semua buku yang telah diterbitkan Adjarindo Creative Aksara</p>
-                </div>
-                <button onclick="closeCatalog()" class="w-12 h-12 rounded-full glass flex items-center justify-center text-white hover:bg-white/20 transition-colors"><i class="fas fa-times text-lg"></i></button>
-            </div>
-            <div id="catalogGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-                <!-- All books rendered here -->
-            </div>
-        </div>
-    </div>
-</div>
-
+<!-- ==================== TOMBOL CEK PESANAN (floating kiri bawah) ==================== -->
+<button onclick="openOrdersPage()" id="ordersFloat" class="fixed bottom-6 left-6 z-40 px-4 py-3 rounded-full glass-dark border border-white/10 text-white/70 hover:text-[#F5C518] hover:border-[#F5C518]/30 transition-all flex items-center gap-2 text-sm shadow-lg">
+    <i class="fas fa-receipt"></i> <span class="hidden md:inline">Pesanan Saya</span>
+</button>
 
 <!-- ==================== JAVASCRIPT ==================== -->
 <script>
 // ============================================
-// KONFIGURASI CMS SPREADSHEETS
+// KONFIGURASI
 // ============================================
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuNiAFBvYi3AND5DurjHvQKF8W1IYqXkF8HrFqVGwf-gGRc94MKyR_nCYneaDDxk7hYt_Pn1eZD6gZ/pub?output=csv';
-const GITHUB_IMAGE_BASE = 'https://raw.githubusercontent.com/ditutorin/jpcreativeweb/main/covers/';
+const GITHUB_IMAGE_BASE = 'https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/';
+const WA_NUMBER = '6282112038795';
+const STORAGE_KEY = 'adjarindo_orders';
 
 // Fallback data buku
 const FALLBACK_BOOKS = [
-    {
-        judul: "Jejak Kata-Kata",
-        penulis: "Ahmad Rizki",
-        halaman: 96,
-        isbn_qrcbn: "978-602-1234-56-7",
-        sinopsis: "Kumpulan cerpen yang mengajak pembaca merenung tentang kehidupan, cinta, dan harapan. Setiap cerita membawa pesan mendalam yang menyentuh hati.",
-        harga: 75000,
-        foto: "jejakkata.png"
-    },
-    {
-        judul: "Cahaya di Ujung Jalan",
-        penulis: "Siti Nurhaliza",
-        halaman: 120,
-        isbn_qrcbn: "978-602-2345-67-8",
-        sinopsis: "Novel inspiratif tentang perjuangan seorang gadis desa yang mengejar impiannya di kota besar. Kisah haru tentang keberanian dan keteguhan hati.",
-        harga: 89000,
-        foto: "cahaya.png"
-    },
-    {
-        judul: "Puisi Hati",
-        penulis: "Rina Wati",
-        halaman: 80,
-        isbn_qrcbn: "978-602-3456-78-9",
-        sinopsis: "Kumpulan puisi yang merangkai emosi dan pengalaman hidup menjadi kata-kata indah. Setiap bait merupakan curahan hati yang tulus.",
-        harga: 65000,
-        foto: "pusihiati.png"
-    },
-    {
-        judul: "Langkah Pasti",
-        penulis: "Budi Santoso",
-        halaman: 110,
-        isbn_qrcbn: "978-602-4567-89-0",
-        sinopsis: "Buku motivasi yang menginspirasi pembaca untuk terus melangkah meskipun menghadapi rintangan. Dilengkapi dengan tips praktis pengembangan diri.",
-        harga: 85000,
-        foto: "langkahpasti.png"
-    },
-    {
-        judul: "Dunia dalam Cerita",
-        penulis: "Maya Putri",
-        halaman: 140,
-        isbn_qrcbn: "978-602-5678-90-1",
-        sinopsis: "Novel fantasi yang membawa pembaca ke dunia lain penuh petualangan dan keajaiban. Cocok untuk pecinta genre fantasi dan fiksi ilmiah.",
-        harga: 95000,
-        foto: "duniacerita.png"
-    },
-    {
-        judul: "Resep Kehidupan",
-        penulis: "Dewi Lestari",
-        halaman: 88,
-        isbn_qrcbn: "978-602-6789-01-2",
-        sinopsis: "Cerita ringan tentang kehidupan seorang koki yang menemukan makna cinta dan keluarga melalui masakan yang ia buat. Hangat dan menyentuh.",
-        harga: 72000,
-        foto: "resep.png"
-    },
-    {
-        judul: "Mimpi yang Terwujud",
-        penulis: "Andi Pratama",
-        halaman: 100,
-        isbn_qrcbn: "978-602-7890-12-3",
-        sinopsis: "Buku pengembangan diri yang membimbing pembaca mengubah mimpi menjadi kenyataan melalui perencanaan dan aksi nyata yang terstruktur.",
-        harga: 80000,
-        foto: "mimpi.png"
-    },
-    {
-        judul: "Senja di Perbukitan",
-        penulis: "Ratna Sari",
-        halaman: 130,
-        isbn_qrcbn: "978-602-8901-23-4",
-        sinopsis: "Novel romantis yang mengisahkan cinta dua insan di balik keindahan alam perbukitan. Sebuah kisah tentang rindu, pertemuan, dan pilihan hati.",
-        harga: 92000,
-        foto: "senja.png"
-    }
+    { judul: "Jejak Kata-Kata", penulis: "Ahmad Rizki", halaman: 96, isbn_qrcbn: "978-602-1234-56-7", sinopsis: "Kumpulan cerpen yang mengajak pembaca merenung tentang kehidupan, cinta, dan harapan. Setiap cerita membawa pesan mendalam yang menyentuh hati.", harga: 75000, foto: "jejakkata.png" },
+    { judul: "Cahaya di Ujung Jalan", penulis: "Siti Nurhaliza", halaman: 120, isbn_qrcbn: "978-602-2345-67-8", sinopsis: "Novel inspiratif tentang perjuangan seorang gadis desa yang mengejar impiannya di kota besar. Kisah haru tentang keberanian dan keteguhan hati.", harga: 89000, foto: "cahaya.png" },
+    { judul: "Puisi Hati", penulis: "Rina Wati", halaman: 80, isbn_qrcbn: "978-602-3456-78-9", sinopsis: "Kumpulan puisi yang merangkai emosi dan pengalaman hidup menjadi kata-kata indah. Setiap bait merupakan curahan hati yang tulus.", harga: 65000, foto: "pusihiati.png" },
+    { judul: "Langkah Pasti", penulis: "Budi Santoso", halaman: 110, isbn_qrcbn: "978-602-4567-89-0", sinopsis: "Buku motivasi yang menginspirasi pembaca untuk terus melangkah meskipun menghadapi rintangan. Dilengkapi dengan tips praktis pengembangan diri.", harga: 85000, foto: "langkahpasti.png" },
+    { judul: "Dunia dalam Cerita", penulis: "Maya Putri", halaman: 140, isbn_qrcbn: "978-602-5678-90-1", sinopsis: "Novel fantasi yang membawa pembaca ke dunia lain penuh petualangan dan keajaiban. Cocok untuk pecinta genre fantasi dan fiksi ilmiah.", harga: 95000, foto: "duniacerita.png" },
+    { judul: "Resep Kehidupan", penulis: "Dewi Lestari", halaman: 88, isbn_qrcbn: "978-602-6789-01-2", sinopsis: "Cerita ringan tentang kehidupan seorang koki yang menemukan makna cinta dan keluarga melalui masakan yang ia buat. Hangat dan menyentuh.", harga: 72000, foto: "resep.png" },
+    { judul: "Mimpi yang Terwujud", penulis: "Andi Pratama", halaman: 100, isbn_qrcbn: "978-602-7890-12-3", sinopsis: "Buku pengembangan diri yang membimbing pembaca mengubah mimpi menjadi kenyataan melalui perencanaan dan aksi nyata yang terstruktur.", harga: 80000, foto: "mimpi.png" },
+    { judul: "Senja di Perbukitan", penulis: "Ratna Sari", halaman: 130, isbn_qrcbn: "978-602-8901-23-4", sinopsis: "Novel romantis yang mengisahkan cinta dua insan di balik keindahan alam perbukitan. Sebuah kisah tentang rindu, pertemuan, dan pilihan hati.", harga: 92000, foto: "senja.png" }
 ];
 
 let allBooks = [];
+let currentBook = null;
 
+// ============================================
+// UTILITY
+// ============================================
 function getBookImageUrl(book) {
     const foto = book.foto || '';
     if (foto.startsWith('http')) return foto;
-    if (!foto.trim()) {
-        return 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80';
-    }
+    if (!foto.trim()) return 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80';
     return GITHUB_IMAGE_BASE + foto;
 }
 
@@ -888,64 +987,48 @@ function formatRupiah(num) {
     return 'Rp' + Number(num).toLocaleString('id-ID');
 }
 
+function slugify(str) {
+    return String(str).toLowerCase().trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+}
+
 function parseCSV(text) {
     const rows = [];
-    let current = '';
-    let inQuotes = false;
-    let row = [];
-
+    let current = '', inQuotes = false, row = [];
     for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const next = text[i + 1];
-
+        const char = text[i], next = text[i + 1];
         if (inQuotes) {
-            if (char === '"' && next === '"') {
-                current += '"';
-                i++;
-            } else if (char === '"') {
-                inQuotes = false;
-            } else {
-                current += char;
-            }
+            if (char === '"' && next === '"') { current += '"'; i++; }
+            else if (char === '"') { inQuotes = false; }
+            else { current += char; }
         } else {
-            if (char === '"') {
-                inQuotes = true;
-            } else if (char === ',') {
-                row.push(current.trim());
-                current = '';
-            } else if (char === '\n' || (char === '\r' && next === '\n')) {
-                row.push(current.trim());
-                current = '';
-                if (row.length > 1 || row[0] !== '') {
-                    rows.push(row);
-                }
+            if (char === '"') { inQuotes = true; }
+            else if (char === ',') { row.push(current.trim()); current = ''; }
+            else if (char === '\n' || (char === '\r' && next === '\n')) {
+                row.push(current.trim()); current = '';
+                if (row.length > 1 || row[0] !== '') rows.push(row);
                 row = [];
                 if (char === '\r') i++;
-            } else {
-                current += char;
-            }
+            } else { current += char; }
         }
     }
-
     row.push(current.trim());
-    if (row.length > 1 || row[0] !== '') {
-        rows.push(row);
-    }
-
+    if (row.length > 1 || row[0] !== '') rows.push(row);
     return rows;
 }
 
+// ============================================
+// FETCH DATA BUKU
+// ============================================
 async function fetchBookData() {
     try {
         const res = await fetch(SHEET_CSV_URL);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const text = await res.text();
         const rows = parseCSV(text);
-
-        if (rows.length < 2) {
-            throw new Error('Data kosong atau hanya header');
-        }
-
+        if (rows.length < 2) throw new Error('Data kosong');
         allBooks = rows.slice(1).map(row => ({
             judul: row[0] || 'Tanpa Judul',
             penulis: row[1] || 'Anonim',
@@ -955,18 +1038,19 @@ async function fetchBookData() {
             harga: parseInt(row[5]) || 0,
             foto: row[6] || ''
         }));
-
-        console.log('✅ Data buku berhasil dimuat:', allBooks.length, 'buku');
+        console.log('✅ Data buku dimuat:', allBooks.length);
         return allBooks;
-
     } catch (e) {
-        console.warn('⚠️ Gagal fetch dari Spreadsheet, menggunakan data fallback:', e.message);
+        console.warn('⚠️ Pakai fallback:', e.message);
         allBooks = [...FALLBACK_BOOKS];
         return allBooks;
     }
 }
 
-function renderBookCard(book, container) {
+// ============================================
+// RENDER KARTU BUKU
+// ============================================
+function createBookCard(book) {
     const card = document.createElement('div');
     card.className = 'book-card glass-card rounded-2xl overflow-hidden cursor-pointer group';
     card.innerHTML = `
@@ -982,102 +1066,289 @@ function renderBookCard(book, container) {
             <p class="text-[#F5C518] font-bold text-sm mt-2">${formatRupiah(book.harga)}</p>
         </div>
     `;
-    card.addEventListener('click', () => openBookDetail(book));
-    container.appendChild(card);
+    card.addEventListener('click', () => openBookPage(book));
+    return card;
 }
 
 function renderGallery() {
     const grid = document.getElementById('bookGrid');
     grid.innerHTML = '';
-    const recentBooks = allBooks.slice(0, 4);
-    recentBooks.forEach(book => renderBookCard(book, grid));
+    allBooks.slice(0, 4).forEach(book => grid.appendChild(createBookCard(book)));
 }
 
-// ============================================
-// RENDER KATALOG LENGKAP
-// ============================================
 function renderCatalog() {
     const grid = document.getElementById('catalogGrid');
     grid.innerHTML = '';
-    allBooks.forEach(book => {
-        const card = document.createElement('div');
-        card.className = 'book-card glass-card rounded-2xl overflow-hidden cursor-pointer group';
-        card.innerHTML = `
-            <div class="aspect-[3/4] overflow-hidden relative">
-                <img src="${getBookImageUrl(book)}" alt="${book.judul}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80'">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                    <span class="text-xs font-medium text-white/80"><i class="fas fa-eye mr-1"></i> Lihat Detail</span>
-                </div>
-            </div>
-            <div class="p-4">
-                <h4 class="font-bold text-sm truncate">${book.judul}</h4>
-                <p class="text-white/40 text-xs mt-1">${book.penulis}</p>
-                <p class="text-[#F5C518] font-bold text-sm mt-2">${formatRupiah(book.harga)}</p>
-            </div>
-        `;
-        card.addEventListener('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            console.log('🖱️ Klik buku di catalog:', book.judul);
-            openBookDetail(book);
-        });
-        grid.appendChild(card);
-    });
-    console.log('✅ Katalog lengkap dirender, total:', allBooks.length, 'buku');
+    allBooks.forEach(book => grid.appendChild(createBookCard(book)));
 }
 
 // ============================================
-// Buka detail buku
+// BARU: HALAMAN DETAIL BUKU (FULL PAGE)
 // ============================================
-function openBookDetail(book) {
-    console.log('📖 Membuka detail buku:', book.judul);
-    
-    if (!book) {
-        console.error('❌ Buku tidak ditemukan!');
+function openBookPage(book, pushHistory = true) {
+    if (!book) return;
+    currentBook = book;
+
+    // Isi konten
+    document.getElementById('pageBookImg').src = getBookImageUrl(book);
+    document.getElementById('pageBookImg').alt = book.judul;
+    document.getElementById('pageBookTitle').textContent = book.judul;
+    document.getElementById('pageBookAuthor').textContent = 'oleh ' + book.penulis;
+    document.getElementById('pageBookAuthor2').textContent = book.penulis;
+    document.getElementById('pageBookPages').textContent = book.halaman + ' halaman';
+    document.getElementById('pageBookISBN').textContent = book.isbn_qrcbn || '-';
+    document.getElementById('pageBookPrice').textContent = formatRupiah(book.harga);
+    document.getElementById('pageBookSynopsis').textContent = book.sinopsis;
+    document.getElementById('breadcrumbTitle').textContent = book.judul;
+    document.getElementById('pageBookWA').href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Halo Adjarindo Creative Aksara, saya ingin bertanya tentang buku "${book.judul}"`)}`;
+
+    // Reset form & summary
+    resetOrderForm();
+    updateSummary();
+
+    // Buku terkait (3 buku lain)
+    const related = allBooks.filter(b => b.judul !== book.judul).slice(0, 3);
+    const relatedEl = document.getElementById('relatedBooks');
+    relatedEl.innerHTML = '';
+    related.forEach(b => {
+        const mini = document.createElement('div');
+        mini.className = 'cursor-pointer group';
+        mini.innerHTML = `
+            <div class="aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                <img src="${getBookImageUrl(b)}" alt="${b.judul}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&q=80'">
+            </div>
+            <div class="text-xs font-medium truncate">${b.judul}</div>
+            <div class="text-[10px] text-[#F5C518] font-bold mt-0.5">${formatRupiah(b.harga)}</div>
+        `;
+        mini.addEventListener('click', () => {
+            openBookPage(b, true);
+            document.querySelector('#bookPage .page-view').scrollTop = 0;
+            document.getElementById('bookPage').scrollTop = 0;
+        });
+        relatedEl.appendChild(mini);
+    });
+
+    // Tampilkan halaman
+    const page = document.getElementById('bookPage');
+    page.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    page.scrollTop = 0;
+
+    // Update URL
+    if (pushHistory) {
+        const slug = slugify(book.judul);
+        history.pushState({ book: slug }, '', '?buku=' + slug);
+    }
+}
+
+function closeBookPage(pushHistory = true) {
+    const page = document.getElementById('bookPage');
+    page.classList.remove('active');
+    document.body.style.overflow = '';
+    currentBook = null;
+
+    if (pushHistory && window.location.search.includes('buku=')) {
+        history.pushState({}, '', window.location.pathname);
+    }
+}
+
+// ============================================
+// BARU: SHARE BUKU
+// ============================================
+function shareBook() {
+    if (!currentBook) return;
+    const url = window.location.href;
+    const text = `Cek buku "${currentBook.judul}" di Adjarindo Creative Aksara`;
+
+    if (navigator.share) {
+        navigator.share({ title: currentBook.judul, text, url }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('✅ Link buku berhasil disalin!');
+        }).catch(() => {
+            showToast('⚠️ Gagal menyalin link', 'error');
+        });
+    }
+}
+
+// ============================================
+// BARU: FORM PEMESANAN
+// ============================================
+function resetOrderForm() {
+    const form = document.getElementById('orderForm');
+    if (form) form.reset();
+    const jumlah = form.querySelector('[name="jumlah"]');
+    if (jumlah) jumlah.value = 1;
+}
+
+function updateSummary() {
+    if (!currentBook) return;
+    const form = document.getElementById('orderForm');
+    const qty = parseInt(form.querySelector('[name="jumlah"]').value) || 1;
+    const unit = currentBook.harga;
+    const total = unit * qty;
+
+    document.getElementById('summaryUnitPrice').textContent = formatRupiah(unit);
+    document.getElementById('summaryQty').textContent = qty;
+    document.getElementById('summaryTotal').textContent = formatRupiah(total);
+}
+
+function scrollToOrderForm() {
+    document.getElementById('orderFormSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Submit form → WhatsApp + simpan ke localStorage
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!currentBook) return;
+
+    const form = e.target;
+    const data = {
+        nama: form.nama.value.trim(),
+        wa: form.wa.value.trim(),
+        alamat: form.alamat.value.trim(),
+        jumlah: parseInt(form.jumlah.value) || 1,
+        catatan: form.catatan.value.trim(),
+        buku: currentBook.judul,
+        harga: currentBook.harga,
+        total: currentBook.harga * (parseInt(form.jumlah.value) || 1),
+        tanggal: new Date().toISOString()
+    };
+
+    // Validasi minimal
+    if (!data.nama || !data.wa || !data.alamat) {
+        showToast('⚠️ Mohon lengkapi data yang wajib diisi', 'error');
         return;
     }
-    
-    // Tutup modal katalog dulu jika terbuka
-    const catalogModal = document.getElementById('catalogModal');
-    if (catalogModal.classList.contains('active')) {
-        catalogModal.classList.remove('active');
-        console.log('🔒 Katalog ditutup otomatis');
+
+    // Simpan ke localStorage
+    saveOrder(data);
+
+    // Susun pesan WhatsApp
+    const lines = [
+        `Halo Adjarindo Creative Aksara, saya ingin memesan buku:`,
+        ``,
+        `📚 *${data.buku}*`,
+        `👤 Penulis: ${currentBook.penulis}`,
+        ``,
+        `*Data Pemesan:*`,
+        `Nama: ${data.nama}`,
+        `No. WA: ${data.wa}`,
+        `Alamat: ${data.alamat}`,
+        `Jumlah: ${data.jumlah} buku`,
+        `Total: ${formatRupiah(data.total)} (belum ongkir)`,
+        data.catatan ? `Catatan: ${data.catatan}` : '',
+        ``,
+        `Mohon informasi ketersediaan dan ongkos kirimnya. Terima kasih 🙏`
+    ].filter(Boolean);
+
+    const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+    window.open(waUrl, '_blank');
+
+    showToast('✅ Pesanan dikirim ke WhatsApp!');
+    resetOrderForm();
+    updateSummary();
+});
+
+// Update summary saat jumlah berubah
+document.addEventListener('input', (e) => {
+    if (e.target.name === 'jumlah' && currentBook) updateSummary();
+});
+
+// ============================================
+// BARU: SIMPAN & CARI PESANAN (localStorage)
+// ============================================
+function saveOrder(order) {
+    try {
+        const orders = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        orders.unshift(order); // terbaru di atas
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(orders.slice(0, 50))); // max 50
+    } catch (e) {
+        console.warn('Gagal simpan pesanan:', e);
     }
-    
-    // Ambil semua elemen
-    const modal = document.getElementById('bookDetailModal');
-    const img = document.getElementById('modalBookImg');
-    const title = document.getElementById('modalBookTitle');
-    const author = document.getElementById('modalBookAuthor');
-    const pages = document.getElementById('modalBookPages');
-    const isbn = document.getElementById('modalBookISBN');
-    const price = document.getElementById('modalBookPrice');
-    const synopsis = document.getElementById('modalBookSynopsis');
-    const waLink = document.getElementById('modalBookWA');
-    
-    // Isi data
-    img.src = getBookImageUrl(book);
-    img.alt = book.judul;
-    title.textContent = book.judul;
-    author.textContent = 'oleh ' + book.penulis;
-    pages.textContent = book.halaman + ' halaman';
-    isbn.textContent = book.isbn_qrcbn || '-';
-    price.textContent = formatRupiah(book.harga);
-    synopsis.textContent = book.sinopsis;
-    waLink.href = `https://wa.me/6282112038795?text=Halo%20Adjarindo%20Creative%20Aksara,%20saya%20ingin%20memesan%20buku%20"${encodeURIComponent(book.judul)}"`;
-    
-    // Tampilkan modal detail
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    
-    console.log('✅ Modal detail terbuka untuk:', book.judul);
 }
 
-function closeBookDetail() {
-    const modal = document.getElementById('bookDetailModal');
-    modal.classList.remove('active');
+function openOrdersPage() {
+    const page = document.getElementById('ordersPage');
+    page.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    page.scrollTop = 0;
+    document.getElementById('searchWA').focus();
+}
+
+function closeOrdersPage() {
+    document.getElementById('ordersPage').classList.remove('active');
     document.body.style.overflow = '';
-    console.log('❌ Modal detail ditutup');
+}
+
+function searchOrders() {
+    const q = document.getElementById('searchWA').value.trim().replace(/[^0-9]/g, '');
+    const list = document.getElementById('ordersList');
+
+    if (!q || q.length < 8) {
+        showToast('⚠️ Masukkan nomor WhatsApp yang valid', 'error');
+        return;
+    }
+
+    let orders = [];
+    try {
+        orders = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch (e) {}
+
+    const filtered = orders.filter(o => o.wa.replace(/[^0-9]/g, '').includes(q));
+
+    if (filtered.length === 0) {
+        list.innerHTML = `
+            <div class="text-center py-12 text-white/40">
+                <i class="fas fa-inbox text-4xl mb-3"></i>
+                <p class="text-sm">Tidak ada pesanan dengan nomor tersebut</p>
+                <p class="text-xs mt-2">Catatan: riwayat hanya tersimpan di browser ini</p>
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = filtered.map(o => {
+        const tgl = new Date(o.tanggal).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+        return `
+            <div class="glass rounded-2xl p-5">
+                <div class="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                        <div class="font-bold">${o.buku}</div>
+                        <div class="text-xs text-white/40 mt-1">${tgl}</div>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-[#F5C518]/15 border border-[#F5C518]/30 text-[#F5C518]">MENUNGGU</span>
+                </div>
+                <div class="text-sm text-white/60 space-y-1">
+                    <div><i class="fas fa-user text-[#F5C518] w-4 mr-1"></i>${o.nama}</div>
+                    <div><i class="fas fa-phone text-[#F5C518] w-4 mr-1"></i>${o.wa}</div>
+                    <div><i class="fas fa-map-marker-alt text-[#F5C518] w-4 mr-1"></i>${o.alamat}</div>
+                    <div><i class="fas fa-box text-[#F5C518] w-4 mr-1"></i>${o.jumlah} buku · <span class="text-[#F5C518] font-bold">${formatRupiah(o.total)}</span></div>
+                    ${o.catatan ? `<div><i class="fas fa-sticky-note text-[#F5C518] w-4 mr-1"></i>${o.catatan}</div>` : ''}
+                </div>
+                <a href="https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Halo, saya ${o.nama} ingin menanyakan status pesanan buku "${o.buku}"`)}" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs text-green-400 hover:text-green-300 font-semibold">
+                    <i class="fab fa-whatsapp"></i> Hubungi Admin
+                </a>
+            </div>
+        `;
+    }).join('');
+}
+
+// ============================================
+// TOAST NOTIFICATION
+// ============================================
+function showToast(msg, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[200] glass-dark px-5 py-3 rounded-xl text-sm font-medium shadow-2xl transition-all';
+    toast.style.background = type === 'error' ? 'rgba(220,38,38,0.9)' : 'rgba(0,0,0,0.9)';
+    toast.style.border = '1px solid ' + (type === 'error' ? 'rgba(220,38,38,0.5)' : 'rgba(245,197,24,0.3)');
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translate(-50%, 20px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
 }
 
 // ============================================
@@ -1085,14 +1356,6 @@ function closeBookDetail() {
 // ============================================
 document.getElementById('btnFullCatalog').addEventListener('click', function(e) {
     e.preventDefault();
-    console.log('📚 Membuka katalog lengkap...');
-    
-    // Tutup modal detail jika terbuka
-    const detailModal = document.getElementById('bookDetailModal');
-    if (detailModal.classList.contains('active')) {
-        detailModal.classList.remove('active');
-    }
-    
     renderCatalog();
     const modal = document.getElementById('catalogModal');
     modal.classList.add('active');
@@ -1100,23 +1363,41 @@ document.getElementById('btnFullCatalog').addEventListener('click', function(e) 
 });
 
 function closeCatalog() {
-    const modal = document.getElementById('catalogModal');
-    modal.classList.remove('active');
+    document.getElementById('catalogModal').classList.remove('active');
     document.body.style.overflow = '';
-    console.log('❌ Katalog ditutup');
 }
 
-// Tutup modal klik di luar
-document.getElementById('bookDetailModal').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('bookDetailModal')) closeBookDetail();
-});
 document.getElementById('catalogModal').addEventListener('click', (e) => {
     if (e.target === document.getElementById('catalogModal')) closeCatalog();
 });
 
-// ESC tutup modal
+// ============================================
+// HANDLE BROWSER BACK/FORWARD
+// ============================================
+window.addEventListener('popstate', (e) => {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('buku');
+
+    if (slug) {
+        const book = allBooks.find(b => slugify(b.judul) === slug);
+        if (book) {
+            openBookPage(book, false);
+            return;
+        }
+    }
+    // Tutup semua page view
+    document.getElementById('bookPage').classList.remove('active');
+    document.getElementById('ordersPage').classList.remove('active');
+    document.body.style.overflow = '';
+});
+
+// ESC untuk menutup page view
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { closeBookDetail(); closeCatalog(); }
+    if (e.key === 'Escape') {
+        if (document.getElementById('bookPage').classList.contains('active')) closeBookPage();
+        else if (document.getElementById('ordersPage').classList.contains('active')) closeOrdersPage();
+        else closeCatalog();
+    }
 });
 
 // ============================================
@@ -1124,11 +1405,8 @@ document.addEventListener('keydown', (e) => {
 // ============================================
 window.addEventListener('scroll', () => {
     const nav = document.getElementById('navbar');
-    if (window.scrollY > 50) {
-        nav.classList.add('nav-scrolled');
-    } else {
-        nav.classList.remove('nav-scrolled');
-    }
+    if (window.scrollY > 50) nav.classList.add('nav-scrolled');
+    else nav.classList.remove('nav-scrolled');
 });
 
 // ============================================
@@ -1200,6 +1478,16 @@ async function init() {
     await fetchBookData();
     renderGallery();
     observeElements();
+
+    // Cek apakah URL punya ?buku=slug → langsung buka halaman detail
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('buku');
+    if (slug) {
+        const book = allBooks.find(b => slugify(b.judul) === slug);
+        if (book) {
+            setTimeout(() => openBookPage(book, false), 300);
+        }
+    }
 }
 
 init();
