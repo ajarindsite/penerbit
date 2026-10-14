@@ -34,9 +34,9 @@
         .about-bg { background:linear-gradient(to bottom, rgba(17,17,17,0.85), rgba(17,17,17,0.7)), url('https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&q=80'); background-size:cover; background-position:center; }
         .contact-bg { background:linear-gradient(to bottom, rgba(17,17,17,0.9), rgba(17,17,17,0.75)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80'); background-size:cover; background-position:center; }
 
-        .btn-primary { background:linear-gradient(135deg, #F5C518, #D4A90A); color:#111; font-weight:700; padding:14px 32px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:15px; }
+        .btn-primary { background:linear-gradient(135deg, #F5C518, #D4A90A); color:#111; font-weight:700; padding:14px 32px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:15px; cursor:pointer; border:none; }
         .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(245,197,24,0.3); }
-        .btn-red { background:linear-gradient(135deg, #DC2626, #B91C1C); color:#fff; font-weight:700; padding:14px 32px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:15px; }
+        .btn-red { background:linear-gradient(135deg, #DC2626, #B91C1C); color:#fff; font-weight:700; padding:14px 32px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:15px; cursor:pointer; border:none; }
         .btn-red:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(220,38,38,0.3); }
         .btn-outline { border:2px solid rgba(245,197,24,0.5); color:#F5C518; font-weight:600; padding:12px 28px; border-radius:12px; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:8px; font-size:14px; background:transparent; cursor:pointer; }
         .btn-outline:hover { background:rgba(245,197,24,0.1); border-color:#F5C518; }
@@ -67,26 +67,7 @@
         @keyframes pulse-glow { 0%,100% { box-shadow:0 0 0 0 rgba(37,211,102,0.5); } 50% { box-shadow:0 0 0 12px rgba(37,211,102,0); } }
         .wa-pulse { animation:pulse-glow 2s ease-in-out infinite; }
 
-        .modal-overlay {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-content {
-            transform: scale(0.95) translateY(20px);
-            transition: all 0.3s ease;
-        }
-        .modal-overlay.active .modal-content {
-            transform: scale(1) translateY(0);
-        }
-
-        /* ============ BARU: Full page view untuk detail buku ============ */
+        /* Full page view untuk detail buku & orders */
         .page-view {
             position: fixed;
             inset: 0;
@@ -97,25 +78,13 @@
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        .page-view.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .page-view.active { opacity: 1; visibility: visible; }
         .page-view .page-content {
             transform: translateY(20px);
             opacity: 0;
             transition: transform 0.4s ease 0.1s, opacity 0.4s ease 0.1s;
         }
-        .page-view.active .page-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Skeleton loading */
-        .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: skeleton 1.5s infinite; }
-        @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-        #bookDetailModal, #catalogModal { display: none !important; } /* Sudah tidak dipakai, tapi disimpan */
+        .page-view.active .page-content { transform: translateY(0); opacity: 1; }
 
         .nav-scrolled { background:rgba(17,17,17,0.9)!important; backdrop-filter:blur(20px)!important; border-bottom:1px solid rgba(255,255,255,0.05); }
 
@@ -134,7 +103,7 @@
         .logo-text .aksara { color: #F5C518; }
         .logo-sub { font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.4); font-weight: 400; }
 
-        /* ============ BARU: Form input styling ============ */
+        /* Form input */
         .form-input {
             width: 100%;
             background: rgba(255,255,255,0.05);
@@ -153,11 +122,18 @@
             box-shadow: 0 0 0 3px rgba(245,197,24,0.1);
         }
         .form-input::placeholder { color: rgba(255,255,255,0.3); }
+        .form-input:disabled { opacity: 0.6; cursor: not-allowed; }
         .form-label { display: block; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
         .form-label .required { color: #DC2626; }
 
-        /* Step indicator */
         .step-badge { width: 28px; height: 28px; border-radius: 50%; background: rgba(245,197,24,0.15); border: 1px solid rgba(245,197,24,0.3); color: #F5C518; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+
+        /* Logo fallback jika gambar gagal load */
+        .logo-img { object-fit: contain; }
+        .logo-img.hidden-logo { display: none; }
+
+        /* Toast */
+        #toastContainer { position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%); z-index: 200; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -168,7 +144,9 @@
         <div class="flex items-center justify-between h-20">
             <a href="#beranda" class="flex items-center gap-3 shrink-0">
                 <div class="flex items-center gap-3">
-                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara" class="h-14 w-auto rounded-lg" onerror="this.style.display='none'">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-[#F5C518] to-[#D4A90A] flex items-center justify-center shrink-0 overflow-hidden">
+                        <img id="navLogo" src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo" class="w-full h-full object-contain logo-img" onerror="this.classList.add('hidden-logo'); this.parentElement.innerHTML='<span style=\'color:#111;font-weight:800;font-size:20px;font-family:Manrope\'>A</span>';">
+                    </div>
                     <div class="flex flex-col">
                         <span class="logo-text text-lg">
                             <span class="adjarindo">Adjarindo</span>
@@ -440,7 +418,7 @@
 <section id="galeri" class="relative py-20 md:py-28" style="background:linear-gradient(180deg, #111 0%, #0D0D0D 50%, #111 100%);">
     <div class="max-w-7xl mx-auto px-5 md:px-8">
         <div class="text-center mb-16">
-            <span class="tag-badge"><i class="fas fa-books mr-1"></i> KATALOG</span>
+            <span class="tag-badge"><i class="fas fa-book mr-1"></i> KATALOG</span>
             <h2 class="section-title mt-4">Buku <span class="text-[#F5C518]">Terbaru</span></h2>
             <p class="section-subtitle mx-auto mt-4">Beberapa buku terbaru yang telah diterbitkan oleh Adjarindo Creative Aksara</p>
         </div>
@@ -449,9 +427,9 @@
             <!-- Books will be rendered by JavaScript -->
         </div>
 
-        <div class="text-center mt-12">
-            <button id="btnFullCatalog" class="btn-outline">
-                <i class="fas fa-th-large"></i> Lihat Katalog Lengkap
+        <div id="catalogActions" class="text-center mt-12 hidden">
+            <button id="btnShowAllBooks" class="btn-outline">
+                <i class="fas fa-th-large"></i> Tampilkan Semua Buku
             </button>
         </div>
     </div>
@@ -495,7 +473,7 @@
             </div>
             <div class="flex justify-center">
                 <div class="glass rounded-3xl p-10 inline-block">
-                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara Logo" class="w-64 md:w-80 rounded-2xl" onerror="this.src='https://via.placeholder.com/300x300/F5C518/111111?text=Adjarindo+Creative+Aksara'">
+                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara Logo" class="w-64 md:w-80 rounded-2xl" onerror="this.parentElement.innerHTML='<div style=\'width:256px;height:256px;background:linear-gradient(135deg,#F5C518,#D4A90A);border-radius:24px;display:flex;align-items:center;justify-content:center;color:#111;font-weight:800;font-size:80px;font-family:Manrope\'>A</div>'">
                 </div>
             </div>
         </div>
@@ -624,7 +602,9 @@
         <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <div class="glass-card rounded-2xl p-8 text-center group">
                 <div class="flex justify-center mb-5">
-                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara" class="w-16 h-16 rounded-xl object-cover" onerror="this.src='https://via.placeholder.com/64x64/F5C518/111111?text=ACA'">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-[#F5C518] to-[#D4A90A] flex items-center justify-center">
+                        <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo" class="w-full h-full object-contain rounded-xl" onerror="this.parentElement.innerHTML='<span style=\'color:#111;font-weight:800;font-size:28px;font-family:Manrope\'>A</span>'">
+                    </div>
                 </div>
                 <i class="fas fa-map-marker-alt text-[#DC2626] text-2xl mb-4"></i>
                 <h4 class="font-bold mb-3">Alamat</h4>
@@ -668,7 +648,9 @@
         <div class="grid md:grid-cols-4 gap-8">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3 mb-4">
-                    <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo Creative Aksara" class="h-12 w-auto rounded-lg" onerror="this.style.display='none'">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-[#F5C518] to-[#D4A90A] flex items-center justify-center shrink-0 overflow-hidden">
+                        <img src="https://raw.githubusercontent.com/adjarinsite/penerbit/main/gambar/logo.png" alt="Adjarindo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<span style=\'color:#111;font-weight:800;font-size:20px;font-family:Manrope\'>A</span>'">
+                    </div>
                     <div class="flex flex-col">
                         <span class="logo-text text-lg">
                             <span class="adjarindo">Adjarindo</span>
@@ -736,10 +718,9 @@
     </div>
 </div>
 
-<!-- ==================== BARU: HALAMAN DETAIL BUKU (FULL PAGE) ==================== -->
+<!-- ==================== HALAMAN DETAIL BUKU (FULL PAGE) ==================== -->
 <div id="bookPage" class="page-view">
     <div class="page-content">
-        <!-- Top bar dengan tombol back -->
         <div class="sticky top-0 z-10 glass-dark border-b border-white/5">
             <div class="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between gap-4">
                 <button onclick="closeBookPage()" class="flex items-center gap-2 text-white/70 hover:text-[#F5C518] transition-colors text-sm font-medium">
@@ -752,7 +733,6 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-5 md:px-8 py-8 md:py-12">
-            <!-- Breadcrumb -->
             <div class="text-xs text-white/40 mb-6">
                 <a href="#beranda" onclick="closeBookPage()" class="hover:text-[#F5C518] transition-colors">Beranda</a>
                 <i class="fas fa-chevron-right mx-2 text-[8px]"></i>
@@ -762,26 +742,22 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 md:gap-12">
-                <!-- Kolom kiri: Gambar -->
                 <div>
                     <div class="glass rounded-3xl p-6 md:p-10 flex items-center justify-center sticky top-24">
                         <img id="pageBookImg" src="" alt="" class="w-full max-w-xs md:max-w-sm rounded-2xl shadow-2xl">
                     </div>
 
-                    <!-- Info tambahan: buku terkait -->
                     <div class="mt-8">
                         <h4 class="font-bold text-sm text-white/60 mb-3"><i class="fas fa-bookmark text-[#F5C518] mr-2"></i>Buku Lainnya</h4>
                         <div id="relatedBooks" class="grid grid-cols-3 gap-3"></div>
                     </div>
                 </div>
 
-                <!-- Kolom kanan: Detail & Form -->
                 <div>
                     <span class="tag-badge"><i class="fas fa-book mr-1"></i> BUKU TERSEDIA</span>
                     <h1 id="pageBookTitle" class="text-3xl md:text-4xl font-extrabold mt-4 leading-tight"></h1>
                     <p id="pageBookAuthor" class="text-white/60 mt-2 text-base"></p>
 
-                    <!-- Rating bintang (statis, biar keliatan seperti e-commerce) -->
                     <div class="flex items-center gap-2 mt-4">
                         <div class="flex text-[#F5C518] text-sm">
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
@@ -789,14 +765,12 @@
                         <span class="text-white/50 text-sm">4.8 · 12 terjual</span>
                     </div>
 
-                    <!-- Harga -->
                     <div class="mt-6 p-5 glass rounded-2xl">
                         <div class="text-xs text-white/50 mb-1">Harga</div>
                         <div id="pageBookPrice" class="text-3xl md:text-4xl font-extrabold text-[#F5C518]"></div>
                         <div class="text-xs text-white/40 mt-2"><i class="fas fa-info-circle mr-1"></i>Belum termasuk ongkos kirim</div>
                     </div>
 
-                    <!-- Spesifikasi -->
                     <div class="mt-6 space-y-3">
                         <div class="flex items-start gap-3 text-sm">
                             <i class="fas fa-file-alt text-[#F5C518] w-5 mt-0.5"></i>
@@ -812,13 +786,11 @@
                         </div>
                     </div>
 
-                    <!-- Sinopsis -->
                     <div class="mt-8">
                         <h3 class="font-bold text-lg mb-3"><i class="fas fa-align-left text-[#F5C518] mr-2"></i>Sinopsis</h3>
                         <p id="pageBookSynopsis" class="text-white/60 text-sm leading-relaxed"></p>
                     </div>
 
-                    <!-- CTA -->
                     <div class="mt-8 flex flex-col sm:flex-row gap-3">
                         <button onclick="scrollToOrderForm()" class="btn-primary flex-1 justify-center">
                             <i class="fas fa-shopping-cart"></i> Pesan Sekarang
@@ -828,7 +800,7 @@
                         </a>
                     </div>
 
-                    <!-- ============ FORM PEMESANAN ============ -->
+                    <!-- FORM PEMESANAN -->
                     <div id="orderFormSection" class="mt-10 p-6 md:p-8 glass rounded-3xl">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="step-badge">1</div>
@@ -858,7 +830,7 @@
                                 </div>
                                 <div>
                                     <label class="form-label">Ongkir</label>
-                                    <input type="text" class="form-input" value="Dihitung admin" disabled style="opacity:0.6;">
+                                    <input type="text" class="form-input" value="Dihitung admin" disabled>
                                 </div>
                             </div>
 
@@ -867,7 +839,6 @@
                                 <textarea name="catatan" class="form-input" rows="2" placeholder="Contoh: minta tanda tangan penulis"></textarea>
                             </div>
 
-                            <!-- Ringkasan total -->
                             <div class="mt-4 p-4 bg-[#F5C518]/5 border border-[#F5C518]/20 rounded-2xl">
                                 <div class="flex justify-between items-center text-sm text-white/60 mb-2">
                                     <span>Harga satuan</span>
@@ -903,7 +874,7 @@
     </div>
 </div>
 
-<!-- ==================== BARU: HALAMAN CEK PESANAN ==================== -->
+<!-- ==================== HALAMAN CEK PESANAN ==================== -->
 <div id="ordersPage" class="page-view">
     <div class="page-content">
         <div class="sticky top-0 z-10 glass-dark border-b border-white/5">
@@ -943,10 +914,13 @@
     </div>
 </div>
 
-<!-- ==================== TOMBOL CEK PESANAN (floating kiri bawah) ==================== -->
+<!-- ==================== TOMBOL PESANAN SAYA (kiri bawah) ==================== -->
 <button onclick="openOrdersPage()" id="ordersFloat" class="fixed bottom-6 left-6 z-40 px-4 py-3 rounded-full glass-dark border border-white/10 text-white/70 hover:text-[#F5C518] hover:border-[#F5C518]/30 transition-all flex items-center gap-2 text-sm shadow-lg">
     <i class="fas fa-receipt"></i> <span class="hidden md:inline">Pesanan Saya</span>
 </button>
+
+<!-- ==================== TOAST CONTAINER ==================== -->
+<div id="toastContainer"></div>
 
 <!-- ==================== JAVASCRIPT ==================== -->
 <script>
@@ -972,6 +946,7 @@ const FALLBACK_BOOKS = [
 
 let allBooks = [];
 let currentBook = null;
+let showAllInGallery = false;
 
 // ============================================
 // UTILITY
@@ -992,6 +967,10 @@ function slugify(str) {
         .replace(/[^\w\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-');
+}
+
+function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
 function parseCSV(text) {
@@ -1055,14 +1034,14 @@ function createBookCard(book) {
     card.className = 'book-card glass-card rounded-2xl overflow-hidden cursor-pointer group';
     card.innerHTML = `
         <div class="aspect-[3/4] overflow-hidden relative">
-            <img src="${getBookImageUrl(book)}" alt="${book.judul}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80'">
+            <img src="${getBookImageUrl(book)}" alt="${escapeHtml(book.judul)}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80'">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                 <span class="text-xs font-medium text-white/80"><i class="fas fa-eye mr-1"></i> Lihat Detail</span>
             </div>
         </div>
         <div class="p-4">
-            <h4 class="font-bold text-sm truncate">${book.judul}</h4>
-            <p class="text-white/40 text-xs mt-1">${book.penulis}</p>
+            <h4 class="font-bold text-sm truncate">${escapeHtml(book.judul)}</h4>
+            <p class="text-white/40 text-xs mt-1">${escapeHtml(book.penulis)}</p>
             <p class="text-[#F5C518] font-bold text-sm mt-2">${formatRupiah(book.harga)}</p>
         </div>
     `;
@@ -1072,24 +1051,29 @@ function createBookCard(book) {
 
 function renderGallery() {
     const grid = document.getElementById('bookGrid');
+    if (!grid) return;
     grid.innerHTML = '';
-    allBooks.slice(0, 4).forEach(book => grid.appendChild(createBookCard(book)));
-}
+    const books = showAllInGallery ? allBooks : allBooks.slice(0, 4);
+    books.forEach(book => grid.appendChild(createBookCard(book)));
 
-function renderCatalog() {
-    const grid = document.getElementById('catalogGrid');
-    grid.innerHTML = '';
-    allBooks.forEach(book => grid.appendChild(createBookCard(book)));
+    // Tampilkan tombol "Lihat Semua" hanya kalau buku lebih dari 4
+    const actions = document.getElementById('catalogActions');
+    if (actions) {
+        if (allBooks.length > 4 && !showAllInGallery) {
+            actions.classList.remove('hidden');
+        } else {
+            actions.classList.add('hidden');
+        }
+    }
 }
 
 // ============================================
-// BARU: HALAMAN DETAIL BUKU (FULL PAGE)
+// HALAMAN DETAIL BUKU (FULL PAGE)
 // ============================================
 function openBookPage(book, pushHistory = true) {
     if (!book) return;
     currentBook = book;
 
-    // Isi konten
     document.getElementById('pageBookImg').src = getBookImageUrl(book);
     document.getElementById('pageBookImg').alt = book.judul;
     document.getElementById('pageBookTitle').textContent = book.judul;
@@ -1102,11 +1086,9 @@ function openBookPage(book, pushHistory = true) {
     document.getElementById('breadcrumbTitle').textContent = book.judul;
     document.getElementById('pageBookWA').href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Halo Adjarindo Creative Aksara, saya ingin bertanya tentang buku "${book.judul}"`)}`;
 
-    // Reset form & summary
     resetOrderForm();
     updateSummary();
 
-    // Buku terkait (3 buku lain)
     const related = allBooks.filter(b => b.judul !== book.judul).slice(0, 3);
     const relatedEl = document.getElementById('relatedBooks');
     relatedEl.innerHTML = '';
@@ -1115,26 +1097,23 @@ function openBookPage(book, pushHistory = true) {
         mini.className = 'cursor-pointer group';
         mini.innerHTML = `
             <div class="aspect-[3/4] rounded-xl overflow-hidden mb-2">
-                <img src="${getBookImageUrl(b)}" alt="${b.judul}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&q=80'">
+                <img src="${getBookImageUrl(b)}" alt="${escapeHtml(b.judul)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&q=80'">
             </div>
-            <div class="text-xs font-medium truncate">${b.judul}</div>
+            <div class="text-xs font-medium truncate">${escapeHtml(b.judul)}</div>
             <div class="text-[10px] text-[#F5C518] font-bold mt-0.5">${formatRupiah(b.harga)}</div>
         `;
         mini.addEventListener('click', () => {
             openBookPage(b, true);
-            document.querySelector('#bookPage .page-view').scrollTop = 0;
             document.getElementById('bookPage').scrollTop = 0;
         });
         relatedEl.appendChild(mini);
     });
 
-    // Tampilkan halaman
     const page = document.getElementById('bookPage');
     page.classList.add('active');
     document.body.style.overflow = 'hidden';
     page.scrollTop = 0;
 
-    // Update URL
     if (pushHistory) {
         const slug = slugify(book.judul);
         history.pushState({ book: slug }, '', '?buku=' + slug);
@@ -1153,7 +1132,7 @@ function closeBookPage(pushHistory = true) {
 }
 
 // ============================================
-// BARU: SHARE BUKU
+// SHARE BUKU
 // ============================================
 function shareBook() {
     if (!currentBook) return;
@@ -1162,21 +1141,31 @@ function shareBook() {
 
     if (navigator.share) {
         navigator.share({ title: currentBook.judul, text, url }).catch(() => {});
-    } else {
+    } else if (navigator.clipboard) {
         navigator.clipboard.writeText(url).then(() => {
             showToast('✅ Link buku berhasil disalin!');
         }).catch(() => {
             showToast('⚠️ Gagal menyalin link', 'error');
         });
+    } else {
+        // Fallback untuk browser lama
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast('✅ Link buku berhasil disalin!'); }
+        catch (e) { showToast('⚠️ Gagal menyalin link', 'error'); }
+        ta.remove();
     }
 }
 
 // ============================================
-// BARU: FORM PEMESANAN
+// FORM PEMESANAN
 // ============================================
 function resetOrderForm() {
     const form = document.getElementById('orderForm');
-    if (form) form.reset();
+    if (!form) return;
+    form.reset();
     const jumlah = form.querySelector('[name="jumlah"]');
     if (jumlah) jumlah.value = 1;
 }
@@ -1184,6 +1173,7 @@ function resetOrderForm() {
 function updateSummary() {
     if (!currentBook) return;
     const form = document.getElementById('orderForm');
+    if (!form) return;
     const qty = parseInt(form.querySelector('[name="jumlah"]').value) || 1;
     const unit = currentBook.harga;
     const total = unit * qty;
@@ -1198,7 +1188,7 @@ function scrollToOrderForm() {
 }
 
 // Submit form → WhatsApp + simpan ke localStorage
-document.getElementById('orderForm').addEventListener('submit', function(e) {
+function handleOrderSubmit(e) {
     e.preventDefault();
     if (!currentBook) return;
 
@@ -1215,16 +1205,13 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
         tanggal: new Date().toISOString()
     };
 
-    // Validasi minimal
     if (!data.nama || !data.wa || !data.alamat) {
         showToast('⚠️ Mohon lengkapi data yang wajib diisi', 'error');
         return;
     }
 
-    // Simpan ke localStorage
     saveOrder(data);
 
-    // Susun pesan WhatsApp
     const lines = [
         `Halo Adjarindo Creative Aksara, saya ingin memesan buku:`,
         ``,
@@ -1248,21 +1235,16 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     showToast('✅ Pesanan dikirim ke WhatsApp!');
     resetOrderForm();
     updateSummary();
-});
-
-// Update summary saat jumlah berubah
-document.addEventListener('input', (e) => {
-    if (e.target.name === 'jumlah' && currentBook) updateSummary();
-});
+}
 
 // ============================================
-// BARU: SIMPAN & CARI PESANAN (localStorage)
+// SIMPAN & CARI PESANAN (localStorage)
 // ============================================
 function saveOrder(order) {
     try {
         const orders = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        orders.unshift(order); // terbaru di atas
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(orders.slice(0, 50))); // max 50
+        orders.unshift(order);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(orders.slice(0, 50)));
     } catch (e) {
         console.warn('Gagal simpan pesanan:', e);
     }
@@ -1273,7 +1255,7 @@ function openOrdersPage() {
     page.classList.add('active');
     document.body.style.overflow = 'hidden';
     page.scrollTop = 0;
-    document.getElementById('searchWA').focus();
+    setTimeout(() => document.getElementById('searchWA').focus(), 300);
 }
 
 function closeOrdersPage() {
@@ -1295,7 +1277,7 @@ function searchOrders() {
         orders = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     } catch (e) {}
 
-    const filtered = orders.filter(o => o.wa.replace(/[^0-9]/g, '').includes(q));
+    const filtered = orders.filter(o => String(o.wa || '').replace(/[^0-9]/g, '').includes(q));
 
     if (filtered.length === 0) {
         list.innerHTML = `
@@ -1314,17 +1296,17 @@ function searchOrders() {
             <div class="glass rounded-2xl p-5">
                 <div class="flex items-start justify-between gap-3 mb-3">
                     <div>
-                        <div class="font-bold">${o.buku}</div>
+                        <div class="font-bold">${escapeHtml(o.buku)}</div>
                         <div class="text-xs text-white/40 mt-1">${tgl}</div>
                     </div>
                     <span class="text-[10px] font-bold px-2 py-1 rounded-lg bg-[#F5C518]/15 border border-[#F5C518]/30 text-[#F5C518]">MENUNGGU</span>
                 </div>
                 <div class="text-sm text-white/60 space-y-1">
-                    <div><i class="fas fa-user text-[#F5C518] w-4 mr-1"></i>${o.nama}</div>
-                    <div><i class="fas fa-phone text-[#F5C518] w-4 mr-1"></i>${o.wa}</div>
-                    <div><i class="fas fa-map-marker-alt text-[#F5C518] w-4 mr-1"></i>${o.alamat}</div>
+                    <div><i class="fas fa-user text-[#F5C518] w-4 mr-1"></i>${escapeHtml(o.nama)}</div>
+                    <div><i class="fas fa-phone text-[#F5C518] w-4 mr-1"></i>${escapeHtml(o.wa)}</div>
+                    <div><i class="fas fa-map-marker-alt text-[#F5C518] w-4 mr-1"></i>${escapeHtml(o.alamat)}</div>
                     <div><i class="fas fa-box text-[#F5C518] w-4 mr-1"></i>${o.jumlah} buku · <span class="text-[#F5C518] font-bold">${formatRupiah(o.total)}</span></div>
-                    ${o.catatan ? `<div><i class="fas fa-sticky-note text-[#F5C518] w-4 mr-1"></i>${o.catatan}</div>` : ''}
+                    ${o.catatan ? `<div><i class="fas fa-sticky-note text-[#F5C518] w-4 mr-1"></i>${escapeHtml(o.catatan)}</div>` : ''}
                 </div>
                 <a href="https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Halo, saya ${o.nama} ingin menanyakan status pesanan buku "${o.buku}"`)}" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs text-green-400 hover:text-green-300 font-semibold">
                     <i class="fab fa-whatsapp"></i> Hubungi Admin
@@ -1338,38 +1320,26 @@ function searchOrders() {
 // TOAST NOTIFICATION
 // ============================================
 function showToast(msg, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
     const toast = document.createElement('div');
-    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[200] glass-dark px-5 py-3 rounded-xl text-sm font-medium shadow-2xl transition-all';
+    toast.className = 'glass-dark px-5 py-3 rounded-xl text-sm font-medium shadow-2xl transition-all';
     toast.style.background = type === 'error' ? 'rgba(220,38,38,0.9)' : 'rgba(0,0,0,0.9)';
     toast.style.border = '1px solid ' + (type === 'error' ? 'rgba(220,38,38,0.5)' : 'rgba(245,197,24,0.3)');
+    toast.style.transform = 'translateY(20px)';
+    toast.style.opacity = '0';
     toast.textContent = msg;
-    document.body.appendChild(toast);
+    container.appendChild(toast);
+    requestAnimationFrame(() => {
+        toast.style.transform = 'translateY(0)';
+        toast.style.opacity = '1';
+    });
     setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translate(-50%, 20px)';
+        toast.style.transform = 'translateY(20px)';
         setTimeout(() => toast.remove(), 300);
     }, 2500);
 }
-
-// ============================================
-// BUKA KATALOG LENGKAP
-// ============================================
-document.getElementById('btnFullCatalog').addEventListener('click', function(e) {
-    e.preventDefault();
-    renderCatalog();
-    const modal = document.getElementById('catalogModal');
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-});
-
-function closeCatalog() {
-    document.getElementById('catalogModal').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-document.getElementById('catalogModal').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('catalogModal')) closeCatalog();
-});
 
 // ============================================
 // HANDLE BROWSER BACK/FORWARD
@@ -1385,7 +1355,6 @@ window.addEventListener('popstate', (e) => {
             return;
         }
     }
-    // Tutup semua page view
     document.getElementById('bookPage').classList.remove('active');
     document.getElementById('ordersPage').classList.remove('active');
     document.body.style.overflow = '';
@@ -1396,7 +1365,6 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (document.getElementById('bookPage').classList.contains('active')) closeBookPage();
         else if (document.getElementById('ordersPage').classList.contains('active')) closeOrdersPage();
-        else closeCatalog();
     }
 });
 
@@ -1472,12 +1440,38 @@ function observeElements() {
 }
 
 // ============================================
+// EVENT BINDING (dipisah supaya aman)
+// ============================================
+function bindEvents() {
+    // Form pemesanan
+    const orderForm = document.getElementById('orderForm');
+    if (orderForm) orderForm.addEventListener('submit', handleOrderSubmit);
+
+    // Update summary saat jumlah berubah
+    document.addEventListener('input', (e) => {
+        if (e.target.name === 'jumlah' && currentBook) updateSummary();
+    });
+
+    // Tombol "Tampilkan Semua Buku" di galeri
+    const btnShowAll = document.getElementById('btnShowAllBooks');
+    if (btnShowAll) {
+        btnShowAll.addEventListener('click', () => {
+            showAllInGallery = true;
+            renderGallery();
+        });
+    }
+
+    // Tombol Pesanan Saya (sudah pakai onclick di HTML, jadi tidak perlu bind lagi)
+}
+
+// ============================================
 // INIT
 // ============================================
 async function init() {
     await fetchBookData();
     renderGallery();
     observeElements();
+    bindEvents();
 
     // Cek apakah URL punya ?buku=slug → langsung buka halaman detail
     const params = new URLSearchParams(window.location.search);
